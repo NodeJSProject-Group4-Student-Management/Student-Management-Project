@@ -10,4 +10,9 @@ const pool = new Pool({
     port: 5432
 })
 
+//TODO eğer ilgili table'lar db'de yoksa ekleyen oto ekleyen fonksiyon yaz. 
+async function createTable() {
+    //    .........
+}
+
 module.exports = pool;

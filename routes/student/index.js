@@ -1,6 +1,8 @@
 const pool = require('../../database');
 
+//TODO unique email
 
+// Tüm öğrencileri getiren fonksiyon
 async function getAllStudents(req, res) {
     try {
         const result = await pool.query('SELECT * FROM ogrenci');
@@ -11,6 +13,7 @@ async function getAllStudents(req, res) {
     }
 }
 
+// Öğrenci ekleme fonksiyonu
 async function addStudent(req, res) {
     const { name, email, counter } = req.body;
     try {
@@ -27,9 +30,14 @@ async function addStudent(req, res) {
     }
 }
 
+// Öğrenci silme fonksiyonu
 async function deleteStudent(req, res) {
     const { id } = req.body;
     try {
+        // ogrenciye bağlı bolum var mı? varsa dept_std_id'yi null yap
+        await pool.query('UPDATE bolum SET dept_std_id = NULL WHERE dept_std_id = $1', [id]);
+        
+        // ogrenci silen kod kısmı
         const result = await pool.query('DELETE FROM ogrenci WHERE id = $1 RETURNING *', [id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Öğrenci bulunamadı.' });
@@ -41,6 +49,7 @@ async function deleteStudent(req, res) {
     }
 }
 
+// Öğrenci verisi güncelleme fonksiyonu
 async function updateStudent(req, res) {
     const { id, name, email, counter } = req.body;
     try {
