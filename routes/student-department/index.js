@@ -6,7 +6,7 @@ async function combineStudentDepartment(req, res) {
 
     try {
         // ogrenci var mı?
-        const ogrenciSorgu = await pool.query('SELECT id FROM ogrenci WHERE email = $1', [userEmail]);
+        const ogrenciSorgu = await pool.query('SELECT id, deptid FROM ogrenci WHERE email = $1', [userEmail]);
         const ogrenci = ogrenciSorgu.rows[0];
         if (!ogrenci) {
             return res.status(404).json({ error: 'Öğrenci bulunamadı.' });
