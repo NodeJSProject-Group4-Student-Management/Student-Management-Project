@@ -21,6 +21,13 @@ async function addStudent(req, res) {
         if (result.rowCount === 1) {
             const addedStudent = result.rows[0];
             res.status(201).json({ success: true, message: 'Öğrenci başarıyla eklendi.', student: addedStudent });
+            const incrementCounterQuery = `
+            UPDATE "ogrenci_sayac"
+            SET sayac = sayac + 1;
+        `;
+            pool.query(incrementCounterQuery)
+                .then(() => console.log('Öğrenci sayaç değeri arttırıldı.'))
+                .catch(err => console.error('Sayaç artırma hatası:', err));
         } else {
             res.status(500).json({ success: false, error: 'Öğrenci eklenirken bir hata oluştu.' });
         }
@@ -36,13 +43,21 @@ async function deleteStudent(req, res) {
     try {
         // ogrenciye bağlı bolum var mı? varsa dept_std_id'yi null yap
         await pool.query('UPDATE bolum SET dept_std_id = NULL WHERE dept_std_id = $1', [id]);
-        
+
         // ogrenci silen kod kısmı
         const result = await pool.query('DELETE FROM ogrenci WHERE id = $1 RETURNING *', [id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Öğrenci bulunamadı.' });
         }
         res.json({ message: 'Öğrenci başarıyla silindi.', deletedStudent: result.rows[0] });
+        const decrementCounterQuery = `
+            UPDATE "ogrenci_sayac"
+            SET sayac = sayac - 1
+            WHERE sayac > 0;
+        `;
+        pool.query(decrementCounterQuery)
+            .then(() => console.log('Öğrenci sayaç değeri azaltıldı.'))
+            .catch(err => console.error('Sayaç azaltma hatası:', err));
     } catch (err) {
         console.error('Öğrenci silinirken bir hata oluştu:', err);
         res.status(500).json({ error: 'Öğrenci silinirken bir hata oluştu.' });

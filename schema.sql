@@ -11,6 +11,9 @@ CREATE TABLE bolum (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100)
 );
+CREATE TABLE ogrenci_sayac(
+    sayac INT
+);
 
 ------------------------------------
 ALTER TABLE
@@ -26,3 +29,5 @@ ADD
     COLUMN deptid INT,
 ADD
     CONSTRAINT fk_deptid FOREIGN KEY (deptid) REFERENCES bolum(id);
+ADD
+    ogrenci_sayac
