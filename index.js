@@ -1,12 +1,11 @@
-const express = require('express');
+const express = require("express");
 
-const pool = require('./database');
+const pool = require("./database");
 
-const studentRoute = require('./routes/student');
-const departmantRoute = require('./routes/departmant');
-const studentdepartmantRoute = require('./routes/student-department');
-
-
+const studentRoute = require("./routes/student");
+const departmantRoute = require("./routes/departmant");
+const studentdepartmantRoute = require("./routes/student-department");
+const mail = require("./mail");
 
 const app = express();
 
@@ -27,42 +26,44 @@ const firstMessage = `
     </div>
 `;
 
-app.get('/', (req, res) => {
-    res.send(firstMessage);
+app.get("/", (req, res) => {
+  res.send(firstMessage);
 });
 
 // get veriyi getirmek için kullanılır.
 // post yeni veri oluşturmak için kullanılır.
 // put var olan veriyi güncellemek için kullanılır. postta veri güncellemek için kullanılabilir.
 
-
 // ogrenci route'ları
 
-app.get('/ogrenciler', studentRoute.getAllStudents);
+app.get("/ogrenciler", studentRoute.getAllStudents);
 
-app.post('/ogrenciekle', studentRoute.addStudent);
+app.post("/ogrenciekle", studentRoute.addStudent);
 
-app.post('/ogrencisil', studentRoute.deleteStudent);
+app.post("/ogrencisil", studentRoute.deleteStudent);
 
-app.put('/ogrenciguncelle', studentRoute.updateStudent);
+app.put("/ogrenciguncelle", studentRoute.updateStudent);
 
+// Haftalık rapor dışında güncel verileri anlık mail atmak istersek
+
+app.get("/mail-gonder", studentRoute.sendMail);
 
 // bolum route'ları
 
-app.get('/bolumler', departmantRoute.getAllDepartments);
+app.get("/bolumler", departmantRoute.getAllDepartments);
 
-app.post('/bolumekle', departmantRoute.addDepartment);
+app.post("/bolumekle", departmantRoute.addDepartment);
 
-app.post('/bolumsil', departmantRoute.deleteDepartment);
+app.post("/bolumsil", departmantRoute.deleteDepartment);
 
-app.put('/bolumguncelle', departmantRoute.updateDepartment);
-
-
+app.put("/bolumguncelle", departmantRoute.updateDepartment);
 
 //TODO ogrenci bolum birlestir fonksiyonu ekle
-app.post('/ogrencibolumbirlestir', studentdepartmantRoute.combineStudentDepartment);
-
+app.post(
+  "/ogrencibolumbirlestir",
+  studentdepartmantRoute.combineStudentDepartment
+);
 
 app.listen(PORT, () => {
-    console.log(`Server started on http://localhost:${PORT}/`);
+  console.log(`Server started on http://localhost:${PORT}/`);
 });
