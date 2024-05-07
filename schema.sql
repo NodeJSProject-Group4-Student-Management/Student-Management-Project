@@ -5,13 +5,18 @@ CREATE TABLE ogrenci (
     email VARCHAR(100),
     counter INT,
     createdTime VARCHAR(100),
-    updatedTime VARCHAR(100)
+    updatedTime VARCHAR(100),
+    gender VARCHAR(20),
+    phoneNumber VARCHAR(20),
 );
 
 -- Bölüm şeması
 CREATE TABLE bolum (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100)
+    name VARCHAR(100),
+    createdTime VARCHAR(100),
+    updatedTime VARCHAR(100),
+    faculty VARCHAR(100)
 );
 
 CREATE TABLE Ogrenci_Sayac (

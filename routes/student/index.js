@@ -17,7 +17,7 @@ async function getAllStudents(req, res) {
 
 // Öğrenci ekleme fonksiyonu
 async function addStudent(req, res) {
-  const { name, email, counter } = req.body;
+  const { name, email,studentID,gender,phoneNumber } = req.body;
   console.log(req)
   const currentTime = moment().format('YYYY-MM-DD HH:mm:ss'); //anlık zamanı aldık
   try {
@@ -36,8 +36,8 @@ async function addStudent(req, res) {
     }
 
     const result = await pool.query(
-      "INSERT INTO ogrenci (name, email, counter, createdTime, updatedTime) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, email, counter, currentTime, currentTime]
+      "INSERT INTO ogrenci (name, email, createdTime, updatedTime,studentID,gender,phoneNumber) VALUES ($1, $2, $3, $4,$5,$6) RETURNING *",
+      [name, email,  currentTime, currentTime,studentID,gender,phoneNumber]
     );
     //Eğer ekleme işlemi başarılıysa, yeni eklenen öğrencinin bilgileri ve bir başarı mesajı JSON formatında döndürülür.
     if (result.rowCount === 1) {
@@ -142,13 +142,13 @@ async function deleteStudent(req, res) {
 
 // Öğrenci verisi güncelleme fonksiyonu
 async function updateStudent(req, res) {
-  const { id, name, email, counter } = req.body;
+  const { id, name, email,studentID,gender,phoneNumber } = req.body; 
   const updateTime = moment().format('YYYY-MM-DD HH:mm:ss'); 
 
   try {
     const result = await pool.query(
-      "UPDATE ogrenci SET name = $1, email = $2, counter = $3, updatedTime = $4 WHERE id = $5 RETURNING *",
-      [name, email, counter, updateTime, id]
+      "UPDATE ogrenci SET name = $1, email = $2, updatedTime = $3, studentID=$4,gender=$5,phoneNumber=$6 WHERE id = $5 RETURNING *",
+      [name, email, updateTime, id,studentID,gender,phoneNumber]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Öğrenci bulunamadı." });

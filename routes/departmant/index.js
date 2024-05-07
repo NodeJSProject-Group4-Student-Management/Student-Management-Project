@@ -13,10 +13,10 @@ async function getAllDepartments(req, res) {
 
 // Bolum ekleme fonksiyonu
 async function addDepartment(req, res) {
-    const { name } = req.body;
+    const { name,faculty  } = req.body;
     const currentTime = moment().format('YYYY-MM-DD HH:mm:ss'); //anlık zamanı aldık
     try {
-        const result = await pool.query('INSERT INTO bolum (name) VALUES ($1,$2) RETURNING *', [name,currentTime]);
+        const result = await pool.query('INSERT INTO bolum (name,createdTime,faculty) VALUES ($1,$2,$3) RETURNING *', [name,currentTime,faculty]);
         if (result.rowCount === 1) {
             const addedDepartmant = result.rows[0];
             res.status(201).json({ success: true, message: 'Bölüm başarıyla eklendi.', department: addedDepartmant });
@@ -50,10 +50,10 @@ async function deleteDepartment(req, res) {
 
 // Bolum verisi güncelleme fonksiyonu
 async function updateDepartment(req, res) {
-    const { id, name } = req.body;
+    const { id, name ,faculty} = req.body;
     const updatedTime = moment().format('YYYY-MM-DD HH:mm:ss'); //anlık zamanı aldık
     try {
-        const result = await pool.query('UPDATE bolum SET name = $1 updatedTime= $3 WHERE id = $2 RETURNING *', [name, id,updatedTime]);
+        const result = await pool.query('UPDATE bolum SET name = $1 updatedTime= $3 faculty=$4  WHERE id = $2 RETURNING *', [name, id,updatedTime,faculty]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Bölüm bulunamadı.' });
         }
