@@ -7,7 +7,7 @@ const pool = new Pool({
     host: process.env.DB_HOSTNAME,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: 5432
+    port: 6000
 })
 
 //TODO eğer ilgili table'lar db'de yoksa ekleyen oto ekleyen fonksiyon yaz. 

@@ -3,7 +3,9 @@ CREATE TABLE ogrenci (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     email VARCHAR(100),
-    counter INT
+    counter INT,
+    createdTime VARCHAR(100),
+    updatedTime VARCHAR(100)
 );
 
 -- Bölüm şeması

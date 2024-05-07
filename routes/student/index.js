@@ -1,5 +1,6 @@
 const pool = require("../../database");
 const Mail = require("../../mail"); // sendMail fonksiyonunu kullanabilmek için ekledik
+const moment = require('moment'); //moment modülünü ekledik
 
 //TODO unique email
 
@@ -17,6 +18,8 @@ async function getAllStudents(req, res) {
 // Öğrenci ekleme fonksiyonu
 async function addStudent(req, res) {
   const { name, email, counter } = req.body;
+  console.log(req)
+  const currentTime = moment().format('YYYY-MM-DD HH:mm:ss'); //anlık zamanı aldık
   try {
     //İlk olarak, ogrenci tablosuna yeni bir öğrenci eklemek için bir SQL sorgusu çalıştırılır.
     //Bu sorgu, yeni öğrencinin bilgilerini ve sayaç değerini veritabanına ekler.
@@ -33,8 +36,8 @@ async function addStudent(req, res) {
     }
 
     const result = await pool.query(
-      "INSERT INTO ogrenci (name, email, counter) VALUES ($1, $2, $3) RETURNING *",
-      [name, email, counter]
+      "INSERT INTO ogrenci (name, email, counter, createdTime, updatedTime) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [name, email, counter, currentTime, currentTime]
     );
     //Eğer ekleme işlemi başarılıysa, yeni eklenen öğrencinin bilgileri ve bir başarı mesajı JSON formatında döndürülür.
     if (result.rowCount === 1) {
@@ -140,10 +143,12 @@ async function deleteStudent(req, res) {
 // Öğrenci verisi güncelleme fonksiyonu
 async function updateStudent(req, res) {
   const { id, name, email, counter } = req.body;
+  const updateTime = moment().format('YYYY-MM-DD HH:mm:ss'); 
+
   try {
     const result = await pool.query(
-      "UPDATE ogrenci SET name = $1, email = $2, counter = $3 WHERE id = $4 RETURNING *",
-      [name, email, counter, id]
+      "UPDATE ogrenci SET name = $1, email = $2, counter = $3, updatedTime = $4 WHERE id = $5 RETURNING *",
+      [name, email, counter, updateTime, id]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Öğrenci bulunamadı." });
@@ -161,6 +166,7 @@ async function updateStudent(req, res) {
     });
   }
 }
+
 async function sendMail(req, res) {
   try {
     await Mail.writeStudentsToJson();
