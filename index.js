@@ -6,7 +6,8 @@ const studentRoute = require("./routes/student");
 const departmantRoute = require("./routes/departmant");
 const studentdepartmantRoute = require("./routes/student-department");
 const {login,register} = require('./routes/login/index');
-const verifyToken = require('./middleware/verify_token');
+const userverifyToken = require('./middleware/verify_token');
+const adminverifyToken = require('./middleware/admin_token');
 const mail = require("./mail");
 
 const app = express();
@@ -43,11 +44,16 @@ app.post('/register',register);
 
 // verify middleware -> Eğer bu middleware'da token oluştuysa diğer routerlara geçiş yapıp sorgu yapabilir.
 
-app.use(verifyToken)
+app.use(userverifyToken)
 
 // ogrenci route'ları
 
 app.get("/ogrenciler", studentRoute.getAllStudents);
+
+app.get("/bolumler", departmantRoute.getAllDepartments);
+
+// admin verify
+app.use(adminverifyToken)
 
 app.post("/ogrenciekle", studentRoute.addStudent);
 
@@ -60,8 +66,6 @@ app.put("/ogrenciguncelle", studentRoute.updateStudent);
 app.get("/mail-gonder", studentRoute.sendMail);
 
 // bolum route'ları
-
-app.get("/bolumler", departmantRoute.getAllDepartments);
 
 app.post("/bolumekle", departmantRoute.addDepartment);
 

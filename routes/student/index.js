@@ -36,7 +36,7 @@ async function addStudent(req, res) {
     }
 
     const result = await pool.query(
-      "INSERT INTO ogrenci (name, email, createdTime, updatedTime,studentID,gender,phoneNumber) VALUES ($1, $2, $3, $4,$5,$6) RETURNING *",
+      "INSERT INTO ogrenci (name, email, createdTime, updatedTime,studentID,gender,phoneNumber) VALUES ($1, $2, $3, $4,$5,$6,$7) RETURNING *",
       [name, email,  currentTime, currentTime,studentID,gender,phoneNumber]
     );
     //Eğer ekleme işlemi başarılıysa, yeni eklenen öğrencinin bilgileri ve bir başarı mesajı JSON formatında döndürülür.
@@ -147,7 +147,7 @@ async function updateStudent(req, res) {
 
   try {
     const result = await pool.query(
-      "UPDATE ogrenci SET name = $1, email = $2, updatedTime = $3, studentID=$4,gender=$5,phoneNumber=$6 WHERE id = $5 RETURNING *",
+      "UPDATE ogrenci SET name = $1, email = $2, updatedTime = $3, studentID=$5,gender=$6,phoneNumber=$7 WHERE id = $4 RETURNING *",
       [name, email, updateTime, id,studentID,gender,phoneNumber]
     );
     if (result.rows.length === 0) {

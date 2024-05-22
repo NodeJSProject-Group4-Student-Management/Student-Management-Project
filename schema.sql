@@ -24,10 +24,11 @@ CREATE TABLE Ogrenci_Sayac (
 );
 ----Admin Şeması
 
-CREATE TABLE admin (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(30),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    role varchar(20)
 );
 
 ------------------------------------
