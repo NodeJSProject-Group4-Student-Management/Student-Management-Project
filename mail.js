@@ -76,7 +76,7 @@ async function weeklyReport() {
 //callback olarak fonksıyonumuzu attık.
 //perıyod zamanı verır
 //2 parametre ıse hangı fonksyonun calıstırılacagını verır
-cron.schedule(period, weeklyReport);
+//cron.schedule(period, weeklyReport);
 
 module.exports = {
   writeStudentsToJson,

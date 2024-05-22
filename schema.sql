@@ -22,6 +22,13 @@ CREATE TABLE bolum (
 CREATE TABLE Ogrenci_Sayac (
     counter int
 );
+----Admin Şeması
+
+CREATE TABLE admin (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(30),
+    password VARCHAR(255)
+);
 
 ------------------------------------
 ALTER TABLE

@@ -5,6 +5,8 @@ const pool = require("./database");
 const studentRoute = require("./routes/student");
 const departmantRoute = require("./routes/departmant");
 const studentdepartmantRoute = require("./routes/student-department");
+const {login,register} = require('./routes/login/index');
+const verifyToken = require('./middleware/verify_token');
 const mail = require("./mail");
 
 const app = express();
@@ -33,6 +35,15 @@ app.get("/", (req, res) => {
 // get veriyi getirmek için kullanılır.
 // post yeni veri oluşturmak için kullanılır.
 // put var olan veriyi güncellemek için kullanılır. postta veri güncellemek için kullanılabilir.
+
+// register , login router
+
+app.post('/login',login);
+app.post('/register',register);
+
+// verify middleware -> Eğer bu middleware'da token oluştuysa diğer routerlara geçiş yapıp sorgu yapabilir.
+
+app.use(verifyToken)
 
 // ogrenci route'ları
 
